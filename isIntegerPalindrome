@@ -1,0 +1,60 @@
+class Solution(object):
+    def isPalindrome(self, x):
+        """
+        :type x: int
+        :rtype: bool
+        """
+        if x<0:
+            return False
+        #get length of number
+        temp = x
+        mylen = 1
+        while (temp >= 10):
+            mylen += 1
+            temp = temp // 10
+        return self.myhelper(x, x, 0, mylen)
+        
+
+    def myhelper(self, leftx, rightx, count, mylen):
+        if count > mylen//2:
+            return True
+        
+        leftnum = leftx
+        rightnum = rightx
+        
+        #get leftmost digit
+        leftcount = 0
+        while (leftnum >= 10):
+            leftcount += 1
+            leftnum = leftnum // 10
+        
+        #get rightmost digit
+        rightnum = rightnum % 10
+        
+        if leftnum != rightnum:
+            return False
+        
+        else:
+            count+=1
+            newleft = leftx-(10**leftcount)*leftnum
+            newright = rightx//10
+            
+            #check for leading zeros
+            templeft = newleft
+            templeft_count = 0
+            while (templeft >= 10):
+                templeft_count += 1
+                templeft = templeft // 10
+            #leading zeros
+            if templeft_count < leftcount-1:
+                currdiff = (leftcount - 1) - templeft_count
+                while currdiff > 0:
+                    newrightnum = newright % 10
+                    if newrightnum != 0:
+                        return False
+                
+                    newright = newright//10
+                    currdiff = currdiff - 1
+                    
+            
+            return self.myhelper(newleft, newright, count, mylen)
